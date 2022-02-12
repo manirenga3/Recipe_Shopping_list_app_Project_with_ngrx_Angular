@@ -1,0 +1,113 @@
+<ng-template appPlaceholder></ng-template>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-md-6 col-md-offset-3">
+      <!-- <div class="alert alert-danger" *ngIf="error">
+        <p>{{ error }}</p>
+      </div> -->
+      <!-- <app-alert
+        [message]="error"
+        *ngIf="error"
+        (close)="onHandleError()"
+      ></app-alert> -->
+      <form #authForm="ngForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="Enter the email"
+            class="form-control"
+            ngModel
+            name="email"
+            required
+            email
+            #email="ngModel"
+          />
+          <span
+            class="help-block"
+            *ngIf="email.touched && email.errors?.required"
+            >Email is required</span
+          >
+          <span class="help-block" *ngIf="email.touched && email.errors?.email"
+            >Enter a valid email</span
+          >
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            [type]="pwdInputType"
+            id="password"
+            placeholder="Enter the password"
+            class="form-control"
+            [(ngModel)]="signupAuth.password"
+            name="password"
+            maxlength="8"
+            required
+            pattern="(?=^.{6,}$)(?=.*\d)(?=.*[!@#$%^&*]+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"
+            #password="ngModel"
+          />
+          <input type="checkbox" (change)="onShowPassword($event)" /> Show
+          Password
+          <span
+            class="help-block"
+            *ngIf="password.touched && password.errors?.required"
+            >Password is required</span
+          >
+          <span
+            class="help-block"
+            *ngIf="!isLoginMode && password.touched && password.errors?.pattern"
+            >Password must be 6-8 characters and must contains Capital letter,
+            Small letter, Number and Special Character</span
+          >
+        </div>
+        <div class="form-group" *ngIf="!isLoginMode">
+          <label for="confirmPassword">Confirm Password</label>
+          <input
+            [type]="cnfPwdInputType"
+            id="confirmPassword"
+            placeholder="Enter the same password"
+            class="form-control"
+            [(ngModel)]="signupAuth.confirmPassword"
+            name="confirmPassword"
+            maxlength="8"
+            required
+            #confirmPassword="ngModel"
+          />
+          <input type="checkbox" (change)="onShowConfirmPassword($event)" />
+          Show Confirm Password
+          <span
+            class="help-block"
+            *ngIf="
+              confirmPassword.touched &&
+              signupAuth.password !== signupAuth.confirmPassword
+            "
+            >Passwords does not matched</span
+          >
+        </div>
+        <div>
+          <button
+            class="btn btn-success"
+            type="submit"
+            [disabled]="
+              !authForm.valid ||
+              (isLoginMode
+                ? false
+                : signupAuth.password !== signupAuth.confirmPassword)
+            "
+          >
+            {{ isLoginMode ? 'Login' : 'SignUp' }}
+          </button>
+          |
+          <button
+            class="btn btn-default"
+            type="button"
+            (click)="onSwitchMode()"
+          >
+            Switch to {{ isLoginMode ? 'SignUp' : 'Login' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
